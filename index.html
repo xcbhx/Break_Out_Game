@@ -41,6 +41,9 @@
         let leftPressed = false;
         let interval = 0;
         let score = 0;
+        let lives = 3;
+
+
         
         const bricks = [];
         for (let c = 0; c < brickColumnCount; c += 1) {
@@ -97,7 +100,6 @@
                             if (score === brickRowCount * brickColumnCount) {
                                 alert("YOU WIN, CONGRATULATIONS!");
                                 document.location.reload();
-                                clearInterval(interval);
                             }
                         }
                     }
@@ -109,6 +111,12 @@
             ctx.font = "16px Arial";
             ctx.fillStyle = "#0095DD";
             ctx.fillText(`Score: ${score}`, 8, 20);
+        }
+
+        function drawLives() {
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "0095DD";
+            ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
         }
         
         function drawBall() {
@@ -151,6 +159,7 @@
             drawBall();
             drawPaddle();
             drawScore();
+            drawLives();
             collisionDetection();
             
             if(x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
@@ -162,9 +171,17 @@
                 if(x > paddleX && x < paddleX + paddleWidth) {
                     dy = -dy
                 } else {
-                    alert("GAME OVER");
-                    document.location.reload();
-                    clearInterval(interval); // Needed for chrome to end game
+                    lives -= 1;
+                    if (!lives) {
+                        alert("GAME OVER");
+                        document.location.reload();
+                    } else {
+                        x = canvas.wdith / 2;
+                        y = canvas.height - 30;
+                        dx = 2;
+                        dy = -2;
+                        paddleX = (canvas.wdith - paddleWidth) / 2;
+                    }
                 }
             }
             
@@ -176,11 +193,11 @@
             
             x += dx;
             y += dy;
+            
+            requestAnimationFrame(draw);
         }
         
-
-
-        interval = setInterval(draw, 10);
+        draw();
 
     </script>
     
