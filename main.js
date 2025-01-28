@@ -25,7 +25,9 @@ const bricks = [];
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
   for (let r = 0; r < brickRowCount; r += 1) {
+    // eslint-disable-next-line no-shadow
     const x = c * (brickWidth + brickPadding) + brickOffsetLeft;
+    // eslint-disable-next-line no-shadow
     const y = r * (brickHeight + brickPadding) + brickOffsetTop;
     bricks[c][r] = { x, y, status: 1 };
   }
@@ -84,20 +86,20 @@ function collisionDetection() {
 
 function drawScore() {
   ctx.font = '16px Arial';
-  ctx.fillStyle = '#0095DD';
+  ctx.fillStyle = '#487068';
   ctx.fillText(`Score: ${score}`, 8, 20);
 }
 
 function drawLives() {
   ctx.font = '16px Arial';
-  ctx.fillStyle = '0095DD';
+  ctx.fillStyle = '#487068';
   ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
 }
 
 function drawBall() {
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = '#0095DD';
+  ctx.fillStyle = '#487068';
   ctx.fill();
   ctx.closePath();
 }
@@ -105,7 +107,7 @@ function drawBall() {
 function drawPaddle() {
   ctx.beginPath();
   ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = '#0095DD';
+  ctx.fillStyle = '#1f3030';
   ctx.fill();
   ctx.closePath();
 }
@@ -116,7 +118,7 @@ function drawBricks() {
       if (bricks[c][r].status === 1) {
         ctx.beginPath();
         ctx.rect(bricks[c][r].x, bricks[c][r].y, brickWidth, brickHeight);
-        ctx.fillStyle = '#0095DD';
+        ctx.fillStyle = '#487068';
         ctx.fill();
         ctx.closePath();
       }
