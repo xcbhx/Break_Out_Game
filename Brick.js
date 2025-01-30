@@ -1,21 +1,12 @@
-class Brick {
-  constructor(x, y, width, height, color = '#487068') {
-    this.x = x;
-    this.y = y;
-    this.status = 1;
-    this.color = color;
-    this.width = width;
-    this.height = height;
-  }
+// eslint-disable-next-line import/extensions
+import Sprite from './Sprite.js';
+// eslint-disable-next-line import/extensions
+import { brickWidth, brickHeight } from './constants.js';
 
-  render(ctx) {
-    if (this.status === 1) {
-      ctx.beginPath();
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.fillStyle = this.color;
-      ctx.fill();
-      ctx.closePath();
-    }
+class Brick extends Sprite {
+  constructor(x, y, width = brickWidth, height = brickHeight, color = '#487068') {
+    super(x, y, width, height, color); // Calls constructor of Sprite
+    this.status = 1;
   }
 }
 
