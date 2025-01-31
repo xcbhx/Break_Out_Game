@@ -1,10 +1,10 @@
 /* eslint-disable import/extensions */
 /* eslint-disable no-undef */
 import Brick from './Brick.js';
+import Ball from './Ball.js';
 import {
   canvas,
   ctx,
-  ballRadius,
   paddleHeight,
   paddleWidth,
   brickRowCount,
@@ -14,20 +14,29 @@ import {
   brickPadding,
   brickOffsetTop,
   brickOffsetLeft,
-  // eslint-disable-next-line comma-dangle
-  bricks
+  bricks,
+  ballRadius,
+  paddleStartX,
 } from './constants.js';
 
-let paddleX = (canvas.width - paddleWidth) / 2;
-let x = canvas.width / 2;
-let y = canvas.height - 30;
-let dx = 2;
-let dy = -2;
+// ---------------------------------------------
+// Variables
+// ---------------------------------------------
+let paddleX = paddleStartX;
+
 let rightPressed = false;
 let leftPressed = false;
 let score = 0;
 let lives = 3;
 
+const ballX = canvas.width / 2;
+const ballY = canvas.height - 30;
+
+const ball = new Ball(ballX, ballY);
+
+// ---------------------------------------------
+// Setup Bricks Array
+// ---------------------------------------------
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
   for (let r = 0; r < brickRowCount; r += 1) {
@@ -38,46 +47,21 @@ for (let c = 0; c < brickColumnCount; c += 1) {
     bricks[c][r] = new Brick(brickX, brickY, brickWidth, brickHeight);
   }
 }
-
-// eslint-disable-next-line no-use-before-define
-document.addEventListener('keydown', keyDownHandler, false);
-// eslint-disable-next-line no-use-before-define
-document.addEventListener('keyup', keyUpHandler, false);
-// eslint-disable-next-line no-use-before-define
-document.addEventListener('mousemove', mouseMoveHandler, false);
-
-function mouseMoveHandler(e) {
-  const relativeX = e.clientX - canvas.offsetLeft;
-  if (relativeX > 0 && relativeX < canvas.width) {
-    paddleX = relativeX - paddleWidth / 2;
-  }
-}
-
-function keyDownHandler(e) {
-  if (e.code === 'ArrowRight') {
-    rightPressed = true;
-  } else if (e.code === 'ArrowLeft') {
-    leftPressed = true;
-  }
-}
-
-function keyUpHandler(e) {
-  if (e.code === 'ArrowRight') {
-    rightPressed = false;
-  } else if (e.code === 'ArrowLeft') {
-    leftPressed = false;
-  }
-}
-
+// ---------------------------------------------
+// Functions
+// ---------------------------------------------
 function collisionDetection() {
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
-      const b = bricks[c][r];
-      if (b.status === 1) {
-        if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight
+      const brick = bricks[c][r];
+      if (brick.status === 1) {
+        if (ball.x > brick.x
+          && ball.x < brick.x + brickWidth
+          && ball.y > brick.y
+          && ball.y < brick.y + brickHeight
         ) {
-          dy = -dy;
-          b.status = 0;
+          ball.dy = -ball.dy;
+          brick.status = 0;
           score += 1;
           if (score === brickRowCount * brickColumnCount) {
             // eslint-disable-next-line no-alert
@@ -103,11 +87,12 @@ function drawLives() {
 }
 
 function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = '#487068';
-  ctx.fill();
-  ctx.closePath();
+  ball.render(ctx);
+}
+
+function moveBall() {
+  ball.x += ball.dx;
+  ball.y += ball.dy;
 }
 
 function drawPaddle() {
@@ -134,6 +119,18 @@ function drawBricks() {
   }
 }
 
+function resetBallAndPaddle() {
+  ball.x = canvas.width / 2;
+  ball.y = canvas.height - 30;
+  ball.dx = 2;
+  ball.dy = -2;
+  paddleX = paddleStartX;
+}
+
+// ---------------------------------------------
+// Game Loop
+// ---------------------------------------------
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBricks();
@@ -142,15 +139,16 @@ function draw() {
   drawScore();
   drawLives();
   collisionDetection();
+  moveBall();
 
-  if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
-    dx = -dx;
+  if (ball.x + ball.dx > canvas.width - ballRadius || ball.x + ball.dx < ballRadius) {
+    ball.dx = -ball.dx;
   }
-  if (y + dy < ballRadius) {
-    dy = -dy;
-  } else if (y + dy > canvas.height - ballRadius) {
-    if (x > paddleX && x < paddleX + paddleWidth) {
-      dy = -dy;
+  if (ball.y + ball.dy < ballRadius) {
+    ball.dy = -ball.dy;
+  } else if (ball.y + ball.dy > canvas.height - ballRadius) {
+    if (ball.x > paddleX && ball.x < paddleX + paddleWidth) {
+      ball.dy = -ball.dy;
     } else {
       lives -= 1;
       if (!lives) {
@@ -158,11 +156,7 @@ function draw() {
         alert('GAME OVER');
         document.location.reload();
       } else {
-        x = canvas.width / 2;
-        y = canvas.height - 30;
-        dx = 2;
-        dy = -2;
-        paddleX = (canvas.width - paddleWidth) / 2;
+        resetBallAndPaddle();
       }
     }
   }
@@ -172,9 +166,50 @@ function draw() {
   } else if (leftPressed && paddleX > 0) {
     paddleX -= 7;
   }
-  x += dx;
-  y += dy;
+  ball.x += ball.dx;
+  ball.y += ball.dy;
   requestAnimationFrame(draw);
 }
 
+// ---------------------------------------------
+// Event Handlers
+// ---------------------------------------------
+
+function mouseMoveHandler(e) {
+  const relativeX = e.clientX - canvas.offsetLeft;
+  if (relativeX > 0 && relativeX < canvas.width) {
+    paddleX = relativeX - paddleWidth / 2;
+  }
+}
+
+function keyDownHandler(e) {
+  if (e.code === 'ArrowRight') {
+    rightPressed = true;
+  } else if (e.code === 'ArrowLeft') {
+    leftPressed = true;
+  }
+}
+
+function keyUpHandler(e) {
+  if (e.code === 'ArrowRight') {
+    rightPressed = false;
+  } else if (e.code === 'ArrowLeft') {
+    leftPressed = false;
+  }
+}
+
+// ---------------------------------------------
+// Register Handlers
+// ---------------------------------------------
+
+// eslint-disable-next-line no-use-before-define
+document.addEventListener('keydown', keyDownHandler, false);
+// eslint-disable-next-line no-use-before-define
+document.addEventListener('keyup', keyUpHandler, false);
+// eslint-disable-next-line no-use-before-define
+document.addEventListener('mousemove', mouseMoveHandler, false);
+
+// ---------------------------------------------
+// Starts program entry point
+// ---------------------------------------------
 draw();

@@ -1,6 +1,13 @@
+// ---------------------------------------------
+// DOM reference
+// ---------------------------------------------
 // eslint-disable-next-line no-undef
 export const canvas = document.getElementById('myCanvas');
 export const ctx = canvas.getContext('2d');
+
+// ---------------------------------------------
+// Constants
+// ---------------------------------------------
 export const ballRadius = 10;
 export const paddleHeight = 10;
 export const paddleWidth = 75;
@@ -12,3 +19,5 @@ export const brickPadding = 10;
 export const brickOffsetTop = 30;
 export const brickOffsetLeft = 30;
 export const bricks = [];
+export const paddleStartX = (canvas.width - paddleWidth) / 2;
+export const PI2 = Math.PI * 2;
