@@ -3,6 +3,7 @@
 import Brick from './Brick.js';
 import Ball from './Ball.js';
 import Paddle from './Paddle.js';
+import Score from './Score.js';
 import {
   canvas,
   ctx,
@@ -26,7 +27,6 @@ import {
 
 let rightPressed = false;
 let leftPressed = false;
-let score = 0;
 let lives = 3;
 
 const ballX = canvas.width / 2;
@@ -34,6 +34,7 @@ const ballY = canvas.height - 30;
 
 const ball = new Ball(ballX, ballY);
 const paddle = new Paddle(paddleStartX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+const score = new Score(8, 20);
 
 // ---------------------------------------------
 // Setup Bricks Array
@@ -63,8 +64,8 @@ function collisionDetection() {
         ) {
           ball.dy = -ball.dy;
           brick.status = 0;
-          score += 1;
-          if (score === brickRowCount * brickColumnCount) {
+          score.increase(1);
+          if (score.value === brickRowCount * brickColumnCount) {
             // eslint-disable-next-line no-alert
             alert('YOU WIN, CONGRATULATIONS!');
             document.location.reload();
@@ -76,9 +77,7 @@ function collisionDetection() {
 }
 
 function drawScore() {
-  ctx.font = '16px Arial';
-  ctx.fillStyle = '#487068';
-  ctx.fillText(`Score: ${score}`, 8, 20);
+  score.render(ctx);
 }
 
 function drawLives() {
