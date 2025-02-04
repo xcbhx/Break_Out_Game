@@ -1,13 +1,7 @@
-// ---------------------------------------------
-// DOM reference
-// ---------------------------------------------
 // eslint-disable-next-line no-undef
 export const canvas = document.getElementById('myCanvas');
 export const ctx = canvas.getContext('2d');
 
-// ---------------------------------------------
-// Constants
-// ---------------------------------------------
 export const ballRadius = 10;
 export const paddleHeight = 10;
 export const paddleWidth = 75;
