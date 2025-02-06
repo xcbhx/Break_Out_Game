@@ -4,6 +4,9 @@ import Brick from './Brick.js';
 import Ball from './Ball.js';
 import Paddle from './Paddle.js';
 import Score from './Score.js';
+import Lives from './Lives.js';
+import Label from './Label.js';
+import Background from './Background.js';
 import {
   canvas,
   ctx,
@@ -19,15 +22,11 @@ import {
   bricks,
   ballRadius,
   paddleStartX,
+  // button,
 } from './constants.js';
-
-// ---------------------------------------------
-// Variables
-// ---------------------------------------------
 
 let rightPressed = false;
 let leftPressed = false;
-let lives = 3;
 
 const ballX = canvas.width / 2;
 const ballY = canvas.height - 30;
@@ -35,6 +34,19 @@ const ballY = canvas.height - 30;
 const ball = new Ball(ballX, ballY);
 const paddle = new Paddle(paddleStartX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
 const score = new Score(8, 20);
+const lives = new Lives(400, 20);
+const scoreLabel = new Label(240, 40, 'Good job! Game over!');
+
+const backgroundImage = new Image();
+backgroundImage.src = 'techbackground.jpg';
+
+let background;
+
+backgroundImage.onload = () => {
+  background = new Background(0, 0, canvas.width, canvas.height, null, backgroundImage);
+};
+
+let gameOver = false;
 
 // ---------------------------------------------
 // Setup Bricks Array
@@ -64,11 +76,12 @@ function collisionDetection() {
         ) {
           ball.dy = -ball.dy;
           brick.status = 0;
-          score.increase(1);
-          if (score.value === brickRowCount * brickColumnCount) {
+          score.increase();
+          if (score.score === brickRowCount * brickColumnCount) {
             // eslint-disable-next-line no-alert
-            alert('YOU WIN, CONGRATULATIONS!');
-            document.location.reload();
+            // alert('YOU WIN, CONGRATULATIONS!');
+            // document.location.reload();
+            scoreLabel.render(ctx);
           }
         }
       }
@@ -81,9 +94,7 @@ function drawScore() {
 }
 
 function drawLives() {
-  ctx.font = '16px Arial';
-  ctx.fillStyle = '#487068';
-  ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
+  lives.render(ctx);
 }
 
 function drawBall() {
@@ -131,11 +142,13 @@ function collisionWithCanvasAndPaddle() {
     if (ball.x > paddle.x && ball.x < paddle.x + paddleWidth) {
       ball.dy = -ball.dy;
     } else {
-      lives -= 1;
-      if (!lives) {
+      lives.loseLife();
+      if (!lives.lives) {
         // eslint-disable-next-line no-alert
-        alert('GAME OVER');
-        document.location.reload();
+        // alert('GAME OVER');
+        scoreLabel.render(ctx);
+        gameOver = true;
+        // document.location.reload();
       } else {
         resetBallAndPaddle();
       }
@@ -143,12 +156,24 @@ function collisionWithCanvasAndPaddle() {
   }
 }
 
+// reset the game add a button & clicking the button will do the following:
+// set gameOver to false
+// set score to 0
+// set lives to 3
+// Move the ball to the starting position
+// set the paddle to starting position
+// set the status to 1 by looping over the bricks array
+
 // ---------------------------------------------
 // Game Loop
 // ---------------------------------------------
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (gameOver) {
+    return;
+  }
+  if (background) background.draw(ctx);
   drawBricks();
   drawBall();
   drawPaddle();

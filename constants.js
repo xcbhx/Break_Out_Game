@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-undef
 export const canvas = document.getElementById('myCanvas');
+// eslint-disable-next-line no-undef
+export const button = document.getElementById('button');
 export const ctx = canvas.getContext('2d');
 
 export const ballRadius = 10;
