@@ -4,7 +4,7 @@ import Sprite from './Sprite.js';
 import { brickWidth, brickHeight } from './constants.js';
 
 class Brick extends Sprite {
-  constructor(x, y, width = brickWidth, height = brickHeight, color = '#487068') {
+  constructor(x, y, width = brickWidth, height = brickHeight, color = '#afd1de') {
     super(x, y, width, height, color); // Calls constructor of Sprite
     this.status = 1;
   }

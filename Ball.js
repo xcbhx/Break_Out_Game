@@ -4,7 +4,7 @@ import { ballRadius, PI2 } from './constants.js';
 import Sprite from './Sprite.js';
 
 class Ball extends Sprite {
-  constructor(x, y, width = ballRadius, height = ballRadius, color = '#b35d0c') {
+  constructor(x, y, width = ballRadius, height = ballRadius, color = '#b02bc2') {
     super(x, y, width, height, color);
     this.dx = 2;
     this.dy = -2;

@@ -5,7 +5,7 @@
 import Sprite from './Sprite.js';
 
 class Label extends Sprite {
-  constructor(x, y, scoreLabel, color = 'red', font = '16px Arial') {
+  constructor(x, y, scoreLabel, color = '#d18bf0', font = '16px Arial') {
     super(x, y, 0, 0, color);
     this.font = font;
     this.scoreLabel = scoreLabel;

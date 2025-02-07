@@ -1,5 +1,5 @@
 class Lives {
-  constructor(x = 65, y = 20, color = '#487068', font = '16px Arial') {
+  constructor(x = 65, y = 20, color = '#fcfcfc', font = '16px Arial') {
     this.x = x;
     this.y = y;
     this.color = color;

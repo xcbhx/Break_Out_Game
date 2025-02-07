@@ -1,5 +1,5 @@
 class Score {
-  constructor(x, y, color = '#487068', font = '16px Arial') {
+  constructor(x, y, color = '#fcfcfc', font = '16px Arial') {
     this.x = x;
     this.y = y;
     this.color = color;

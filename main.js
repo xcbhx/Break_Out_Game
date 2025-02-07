@@ -22,7 +22,6 @@ import {
   bricks,
   ballRadius,
   paddleStartX,
-  // button,
 } from './constants.js';
 
 let rightPressed = false;
@@ -35,10 +34,10 @@ const ball = new Ball(ballX, ballY);
 const paddle = new Paddle(paddleStartX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
 const score = new Score(8, 20);
 const lives = new Lives(400, 20);
-const scoreLabel = new Label(240, 40, 'Good job! Game over!');
+const scoreLabel = new Label(160, 180, 'Good Job! Game Over!');
 
 const backgroundImage = new Image();
-backgroundImage.src = 'techbackground.jpg';
+backgroundImage.src = 'backgroundImage.jpg';
 
 let background;
 
@@ -78,10 +77,8 @@ function collisionDetection() {
           brick.status = 0;
           score.increase();
           if (score.score === brickRowCount * brickColumnCount) {
-            // eslint-disable-next-line no-alert
-            // alert('YOU WIN, CONGRATULATIONS!');
-            // document.location.reload();
             scoreLabel.render(ctx);
+            gameOver = true;
           }
         }
       }
@@ -116,14 +113,6 @@ function drawBricks() {
   }
 }
 
-function resetBallAndPaddle() {
-  ball.x = canvas.width / 2;
-  ball.y = canvas.height - 30;
-  ball.dx = 2;
-  ball.dy = -2;
-  paddle.x = paddleStartX;
-}
-
 function movePaddle() {
   if (rightPressed && paddle.x < canvas.width - paddleWidth) {
     paddle.x += 7;
@@ -143,26 +132,37 @@ function collisionWithCanvasAndPaddle() {
       ball.dy = -ball.dy;
     } else {
       lives.loseLife();
-      if (!lives.lives) {
-        // eslint-disable-next-line no-alert
-        // alert('GAME OVER');
-        scoreLabel.render(ctx);
+      if (lives.lives <= 0) {
         gameOver = true;
-        // document.location.reload();
+        // eslint-disable-next-line no-use-before-define
+        draw();
       } else {
-        resetBallAndPaddle();
+        // eslint-disable-next-line no-use-before-define
+        resetGame();
       }
     }
   }
 }
 
-// reset the game add a button & clicking the button will do the following:
-// set gameOver to false
-// set score to 0
-// set lives to 3
-// Move the ball to the starting position
-// set the paddle to starting position
-// set the status to 1 by looping over the bricks array
+function resetGame() {
+  if (gameOver) return; // Prevent reset if the game is over
+
+  // Reset ball position
+  ball.x = canvas.width / 2;
+  ball.y = canvas.height - 30;
+  ball.dx = 2;
+  ball.dy = -2;
+
+  // Reset paddle position
+  paddle.x = paddleStartX;
+
+  // Reset bricks
+  for (let c = 0; c < brickColumnCount; c += 1) {
+    for (let r = 0; r < brickRowCount; r += 1) {
+      bricks[c][r].status = 1; // Reset all bricks to visible
+    }
+  }
+}
 
 // ---------------------------------------------
 // Game Loop
@@ -170,15 +170,19 @@ function collisionWithCanvasAndPaddle() {
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (gameOver) {
-    return;
-  }
+
   if (background) background.draw(ctx);
   drawBricks();
   drawBall();
   drawPaddle();
   drawScore();
   drawLives();
+
+  if (gameOver) {
+    scoreLabel.render(ctx);
+    return;
+  }
+
   collisionDetection();
   ball.move();
   movePaddle();
@@ -224,6 +228,13 @@ document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 // eslint-disable-next-line no-use-before-define
 document.addEventListener('mousemove', mouseMoveHandler, false);
+document.getElementById('resetButton').addEventListener('click', () => {
+  score.score = 0;
+  lives.lives = 3;
+  gameOver = false;
+  resetGame();
+  draw();
+});
 
 // ---------------------------------------------
 // Starts program entry point
