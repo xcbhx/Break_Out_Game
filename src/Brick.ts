@@ -1,10 +1,11 @@
 // eslint-disable-next-line import/extensions
-import Sprite from './Sprite.js';
+import Sprite from './Sprite';
 // eslint-disable-next-line import/extensions
-import { brickWidth, brickHeight } from './constants.js';
+import { brickWidth, brickHeight } from './constants';
 
 class Brick extends Sprite {
-  constructor(x, y, width = brickWidth, height = brickHeight, color = '#afd1de') {
+  status: number;
+  constructor(x: number, y: number, width = brickWidth, height = brickHeight, color = '#afd1de') {
     super(x, y, width, height, color); // Calls constructor of Sprite
     this.status = 1;
   }

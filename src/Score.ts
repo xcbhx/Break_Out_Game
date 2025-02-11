@@ -1,5 +1,10 @@
 class Score {
-  constructor(x, y, color = '#fcfcfc', font = '16px Arial') {
+  x: number;
+  y: number;
+  color: string;
+  font: string;
+  value: number
+  constructor(x: number, y: number, color = '#fcfcfc', font = '16px Arial') {
     this.x = x;
     this.y = y;
     this.color = color;
@@ -15,7 +20,7 @@ class Score {
     this.value = 0; // Reset score when the game restarts
   }
 
-  render(ctx) {
+  render(ctx: CanvasRenderingContext2D) {
     ctx.font = this.font;
     ctx.fillStyle = this.color;
     ctx.fillText(`Score: ${this.value}`, this.x, this.y);

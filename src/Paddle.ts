@@ -1,9 +1,9 @@
 // eslint-disable-next-line import/extensions, quotes
-import Sprite from "./Sprite.js";
+import Sprite from "./Sprite";
 
 class Paddle extends Sprite {
   // eslint-disable-next-line no-useless-constructor
-  constructor(x, y, width, height, color) {
+  constructor(x: number, y: number, width: number, height: number, color: string) {
     super(x, y, width, height, color);
   }
 }

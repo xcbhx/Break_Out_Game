@@ -1,12 +1,12 @@
 /* eslint-disable import/extensions */
 /* eslint-disable no-undef */
-import Brick from './Brick.js';
-import Ball from './Ball.js';
-import Paddle from './Paddle.js';
-import Score from './Score.js';
-import Lives from './Lives.js';
-import Label from './Label.js';
-import Background from './Background.js';
+import Brick from './Brick';
+import Ball from './Ball';
+import Paddle from './Paddle';
+import Score from './Score';
+import Lives from './Lives';
+import Label from './Label';
+import Background from './Background';
 import {
   canvas,
   ctx,
@@ -22,7 +22,7 @@ import {
   bricks,
   ballRadius,
   paddleStartX,
-} from './constants.js';
+} from './constants';
 
 let rightPressed = false;
 let leftPressed = false;
@@ -30,8 +30,8 @@ let leftPressed = false;
 const ballX = canvas.width / 2;
 const ballY = canvas.height - 30;
 
-const ball = new Ball(ballX, ballY);
-const paddle = new Paddle(paddleStartX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+const ball: Ball = new Ball(ballX, ballY);
+const paddle = new Paddle(paddleStartX, canvas.height - paddleHeight, paddleWidth, paddleHeight, '#63bbf2');
 const score = new Score(8, 20);
 const lives = new Lives(400, 20);
 const scoreLabel = new Label(160, 180, 'Good Job! Game Over!');
@@ -39,7 +39,7 @@ const scoreLabel = new Label(160, 180, 'Good Job! Game Over!');
 const backgroundImage = new Image();
 backgroundImage.src = 'backgroundImage.jpg';
 
-let background;
+let background: Background;
 
 backgroundImage.onload = () => {
   background = new Background(0, 0, canvas.width, canvas.height, null, backgroundImage);
@@ -195,14 +195,14 @@ function draw() {
 // Event Handlers
 // ---------------------------------------------
 
-function mouseMoveHandler(e) {
+function mouseMoveHandler(e: { clientX: number; }) {
   const relativeX = e.clientX - canvas.offsetLeft;
   if (relativeX > 0 && relativeX < canvas.width) {
     paddle.x = relativeX - paddleWidth / 2;
   }
 }
 
-function keyDownHandler(e) {
+function keyDownHandler(e: { code: string; }) {
   if (e.code === 'ArrowRight') {
     rightPressed = true;
   } else if (e.code === 'ArrowLeft') {
@@ -210,7 +210,7 @@ function keyDownHandler(e) {
   }
 }
 
-function keyUpHandler(e) {
+function keyUpHandler(e: { code: string; }) {
   if (e.code === 'ArrowRight') {
     rightPressed = false;
   } else if (e.code === 'ArrowLeft') {
