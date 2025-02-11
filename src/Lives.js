@@ -4,15 +4,15 @@ class Lives {
     this.y = y;
     this.color = color;
     this.font = font;
-    this.lives = 3;
+    this.value = 3;
   }
 
   loseLife(dead = 1) {
-    this.lives -= dead;
+    this.value -= dead;
   }
 
   reset() {
-    this.lives = 3;
+    this.value = 3;
   }
 
   render(ctx) {

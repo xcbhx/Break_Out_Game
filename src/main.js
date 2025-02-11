@@ -76,7 +76,7 @@ function collisionDetection() {
           ball.dy = -ball.dy;
           brick.status = 0;
           score.increase();
-          if (score.score === brickRowCount * brickColumnCount) {
+          if (score.value === brickRowCount * brickColumnCount) {
             scoreLabel.render(ctx);
             gameOver = true;
           }
@@ -132,7 +132,7 @@ function collisionWithCanvasAndPaddle() {
       ball.dy = -ball.dy;
     } else {
       lives.loseLife();
-      if (lives.lives <= 0) {
+      if (lives.value <= 0) {
         gameOver = true;
         // eslint-disable-next-line no-use-before-define
         draw();
@@ -229,8 +229,8 @@ document.addEventListener('keyup', keyUpHandler, false);
 // eslint-disable-next-line no-use-before-define
 document.addEventListener('mousemove', mouseMoveHandler, false);
 document.getElementById('resetButton').addEventListener('click', () => {
-  score.score = 0;
-  lives.lives = 3;
+  score.value = 0;
+  lives.value = 3;
   gameOver = false;
   resetGame();
   draw();
