@@ -31,10 +31,10 @@ const ballX = canvas.width / 2;
 const ballY = canvas.height - 30;
 
 const ball: Ball = new Ball(ballX, ballY);
-const paddle = new Paddle(paddleStartX, canvas.height - paddleHeight, paddleWidth, paddleHeight, '#63bbf2');
-const score = new Score(8, 20);
-const lives = new Lives(400, 20);
-const scoreLabel = new Label(160, 180, 'Good Job! Game Over!');
+const paddle: Paddle = new Paddle(paddleStartX, canvas.height - paddleHeight, paddleWidth, paddleHeight, '#63bbf2');
+const score: Score = new Score(8, 20);
+const lives: Lives = new Lives(400, 20);
+const scoreLabel: Label = new Label(160, 180, 'Good Job! Game Over!');
 
 const backgroundImage = new Image();
 backgroundImage.src = 'backgroundImage.jpg';
